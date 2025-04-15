@@ -40,7 +40,7 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 #### Error Handling
 | From State              | To State              | Trigger/Condition                                                                 |
 |-------------------------|-----------------------|-----------------------------------------------------------------------------------|
-| Any state              | Error Condition       | Critical fault detected (e.g., sensor failure).                                   |
+| Any state              | Error Condition       | Critical fault detected (e.g. sensor failure, temperature over 100°C).                                   |
 | Error Condition         | Idle                  | Maintenance complete + system reset.                                              |
 
 
