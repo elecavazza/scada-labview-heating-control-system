@@ -8,7 +8,7 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 
 | State Name              | Description                                                                 | Entry Action                     | Exit Action                      |
 |-------------------------|-----------------------------------------------------------------------------|----------------------------------|----------------------------------|
-| Idle (Standby)          | System inactive, waiting for triggers.                                      | Turn off heating element.        | Prepare for heating/cooling.     |
+| Idle (Standby)          | System inactive, waiting for triggers.                                      | Turn off heating element.        | Prepare for heating/cool down.     |
 | Heating Element On      | Actively heating to reach target temperature.                               | Enable heating element.          | Disable heating element.         |
 | Heating Element Off     | Cooldown phase (prevents rapid cycling).                                    | Start cooldown timer.            | Reset timer.                     |
 | Manual Mode             | User overrides automatic control.                                           | Disable automatic transitions.   | Re-enable automatic logic.       |
