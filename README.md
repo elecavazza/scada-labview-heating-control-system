@@ -72,6 +72,5 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 * Max reading
 * Min reading
 * Use shift registers to provide running average values for temperature based decisions
-* Historical temperature reading (Chart)
 * Logged data points to be stored in an external file
 * Add Error condition – maintenance mode
