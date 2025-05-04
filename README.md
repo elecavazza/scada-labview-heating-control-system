@@ -69,6 +69,4 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 ## TODO
 
 * Move variables to `global.vi`
-* Max reading
-* Min reading
 * Add Error condition – maintenance mode
