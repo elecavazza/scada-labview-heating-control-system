@@ -14,7 +14,7 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 | Manual Mode             | User overrides automatic control.                                           | Disable automatic transitions.   | Re-enable automatic logic.       |
 | - Manual Heating On     | User forces heating element on.                                             | Enable heating element.          | –                                |
 | - Manual Heating Off    | User forces heating element off.                                            | Disable heating element.         | –                                |
-| Error Condition         | Activated on critical faults (e.g., sensor failure).                        | Trigger alarms, log errors.      | Reset faults after maintenance.  |
+| Error Condition         | Activated on critical faults (e.g., temperature over 100°C).                        | Trigger alarms, log errors.      | Reset faults after maintenance.  |
 
 
 
@@ -40,7 +40,7 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 #### Error Handling
 | From State              | To State              | Trigger/Condition                                                                 |
 |-------------------------|-----------------------|-----------------------------------------------------------------------------------|
-| Any state              | Error Condition       | Critical fault detected (e.g. sensor failure, temperature over 100°C).                                   |
+| Any state              | Error Condition       | Critical fault detected (e.g. temperature over 100°C).                                   |
 | Error Condition         | Idle                  | Maintenance complete + system reset.                                              |
 
 
