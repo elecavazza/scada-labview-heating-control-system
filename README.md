@@ -65,8 +65,3 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 ### Controls and indicators: 
 
 ![](./pictures/front-panel.png)
-
-## TODO
-
-* Move variables to `global.vi`
-* Add Error condition – maintenance mode
