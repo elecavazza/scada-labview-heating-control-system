@@ -9,8 +9,8 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 | State Name              | Description                                                                 | Entry Action                     | Exit Action                      |
 |-------------------------|-----------------------------------------------------------------------------|----------------------------------|----------------------------------|
 | Idle (Standby)          | System inactive, waiting for triggers.                                      | Turn off heating element.        | Prepare for heating/cool down.     |
-| Heating Element On      | Actively heating to reach target temperature.                               | Enable heating element.          | Disable heating element.         |
-| Heating Element Off     | Cooldown phase (prevents rapid cycling).                                    | Start cooldown timer.            | Reset timer.                     |
+| Automatic Heating Element On      | Actively heating to reach target temperature.                               | Enable heating element.          | Disable heating element.         |
+| Automatic Heating Element Off     | Cooldown phase                                    |      Disable heating element.      |          Enable heating element.           |
 | Manual Mode             | User overrides automatic control.                                           | Disable automatic transitions.   | Re-enable automatic logic.       |
 | - Manual Heating On     | User forces heating element on.                                             | Enable heating element.          | –                                |
 | - Manual Heating Off    | User forces heating element off.                                            | Disable heating element.         | –                                |
@@ -52,11 +52,11 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 
 ![](./pictures/block-diagram-idle-case.png)
 
-### Filling State:  
+### Heating Element On State:  
 
 ![](./pictures/block-diagram-filling-case.png)
 
-### Emptying State:  
+### Heating Element Off State:  
 
 ![](./pictures/block-diagram-emptying-case.png)
 
