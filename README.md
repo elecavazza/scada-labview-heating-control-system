@@ -46,30 +46,77 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 
 
 
-## Block Diagrams
 
-### Server
+## Server
+
+### Front Panel
+
+![](./pictures/server-front-panel.png)
+
+### Block Diagram
 
 #### Full Diagram:  
-#### Idle State:  
 
-![](./pictures/block-diagram-idle-case.png)
+![](./pictures/server-block-diagram.png)
 
-#### Heating Element On State:  
+#### Initialization:  
 
-![](./pictures/block-diagram-filling-case.png)
+![](./pictures/server-block-diagram-initialization.png)
 
-#### Heating Element Off State:  
+#### Max and Min Temperature:  
 
-![](./pictures/block-diagram-emptying-case.png)
+![](./pictures/server-block-diagram-calculate-max-and-min-temp.png)
 
+#### Track last 5 for Average:  
 
-### Client
+![](./pictures/server-block-diagram-track-last-5-for-average.png)
+
+#### System Control State Management (Automatic):  
+
+![](./pictures/server-block-diagram-system-control-state-management-automatic.png)
+
+#### System Control State Management (Manual):  
+
+![](./pictures/server-block-diagram-system-control-state-management-manual.png)
+
+#### System Control State Management (Maintenance):  
+
+![](./pictures/server-block-diagram-maintenance-state-management.png)
+
+#### Password Control:  
+
+![](./pictures/server-block-diagram-password-control.png)
+
+#### Map Local Variables to Globals:  
+
+![](./pictures/server-block-diagram-local-to-global.png)
+
+#### Heating State Management (Heating ON):  
+
+![](./pictures/server-block-diagram-heating-state-management-heating-on.png)
+
+#### Heating State Management (Heating OFF):  
+
+![](./pictures/server-block-diagram-heating-state-management-heating-off.png)
+
+#### Logging to File:  
+
+![](./pictures/server-block-diagram-file-output-1.png)
+![](./pictures/server-block-diagram-file-output-2.png)
+![](./pictures/historical-reading-output-csv.png)
+
+## Client
+
+### Front Panel
+
+![](./pictures/client-front-panel.png)
+
+### Block Diagram
 
 ![](./pictures/client-block-diagram.png)
 
-## Front Panel
+## Global
 
-#### Controls and indicators: 
+### Front Panel
 
-![](./pictures/front-panel.png)
+![](./pictures/global-front-panel.png)
