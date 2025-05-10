@@ -4,158 +4,174 @@
 
 This is a LabVIEW-based SCADA heating control system utilizing the Datalogging and Supervisory Control Module. It supports automatic, manual, and maintenance modes, with robust temperature state management and logging.  
 
-## State Table
+---
 
-| State Name              | Description                                                                 | Entry Action                     | Exit Action                      |
-|-------------------------|-----------------------------------------------------------------------------|----------------------------------|----------------------------------|
-| Idle (Standby)          | System inactive, waiting for triggers.                                      | Turn off heating element.        | Prepare for heating/cool down.     |
-| Automatic Heating Element On      | Actively heating to reach target temperature.                               | Enable heating element.          | Disable heating element.         |
-| Automatic Heating Element Off     | Cooldown phase                                    |      Disable heating element.      |          Enable heating element.           |
-| Manual Mode             | User overrides automatic control.                                           | Disable automatic transitions.   | Re-enable automatic logic.       |
-| - Manual Heating On     | User forces heating element on.                                             | Enable heating element.          | –                                |
-| - Manual Heating Off    | User forces heating element off.                                            | Disable heating element.         | –                                |
-| Maintenance Mode         | Activated on critical faults (e.g., temperature over 100°C).                        | Temperature > 100°C     | Reset faults after maintenance.  |
+## 📑 Table of Contents
 
+- [Overview](#overview)  
+- [System States](#system-states)  
+- [State Transitions](#state-transitions)  
+- [Server Components](#server-components)  
+- [Client Interface](#client-interface)  
+- [Global Variables Panel](#global-variables-panel)  
+- [How to Use](#how-to-use)  
+- [Requirements](#requirements)  
 
-
-
-## State Transition tables
-
-#### Automatic Mode Transitions
-| From State          | To State              | Trigger/Condition                                                                 |
-|---------------------|-----------------------|-----------------------------------------------------------------------------------|
-| Idle                | Heating Element On    | Temperature < Setpoint (auto mode enabled).                                       |
-| Heating Element On  | Heating Element Off   | Temperature ≥ Setpoint                                 |
-| Heating Element Off | Idle                  | Temperature stabilizes                                |
-| Heating Element Off | Heating Element On    | Temperature < Setpoint                         |
-
-#### Manual Mode Transitions
-| From State              | To State              | Trigger/Condition                                                                 |
-|-------------------------|-----------------------|-----------------------------------------------------------------------------------|
-| Any state              | Manual Mode           | Manual control switch enabled.                                                   |
-| Manual Mode (Heating On)| Manual Mode (Off)     | User toggles manual switch to "Off".                                              |
-| Manual Mode (Heating Off)| Manual Mode (On)     | User toggles manual switch to "On".                                               |
-| Manual Mode            | Idle                  | Manual control switch disabled.                                                   |
-
-#### Maintenance Mode Transitions
-| From State              | To State              | Trigger/Condition                                                                 |
-|-------------------------|-----------------------|-----------------------------------------------------------------------------------|
-| Any state              | Maintenance Mode       | Critical fault detected (e.g. temperature over 100°C).                                   |
-| Maintenance Mode        | Idle                  | Maintenance complete + system reset.                                              |
+---
 
 
+## 📘 Overview
 
+This SCADA system automates temperature control using threshold-based logic and logs real-time data. It supports three operational modes:
 
+- **Automatic**: Temperature is maintained between predefined bounds.
+- **Manual**: User directly controls the heater.
+- **Maintenance**: System halts operation due to a fault (e.g., overheating).
 
-## Server
+---
 
-### Front Panel
+## 🧭 System States
 
-![](./pictures/server-front-panel.png)
+| **State**                | **Description**                                            | **On Entry**                | **On Exit**                     |
+|--------------------------|------------------------------------------------------------|-----------------------------|----------------------------------|
+| Idle (Standby)           | Inactive; waiting for conditions to change.                | Turn off heating element.   | Prepare for heating/cooling.    |
+| Auto Heating ON          | Heater is on; raising temperature to setpoint.             | Enable heating element.     | Disable heating element.        |
+| Auto Heating OFF         | Heater is off; system is cooling.                          | Disable heating element.    | Enable heating element.         |
+| Manual Mode              | User overrides automated behavior.                         | Disable auto transitions.   | Re-enable automatic logic.      |
+| └── Manual Heating ON    | User forces heater ON.                                     | Enable heating element.     | –                                |
+| └── Manual Heating OFF   | User forces heater OFF.                                    | Disable heating element.    | –                                |
+| Maintenance Mode         | Triggered on faults (e.g., temp > 100°C).                  |  Disable control.| Reset after maintenance.         |
 
-### Block Diagram
+---
 
-#### Full Diagram:  
+## 🔁 State Transitions
 
-![](./pictures/server-block-diagram.png)
+### Automatic Mode
 
-#### Initialization:  
+| From               | To                  | Trigger                                      |
+|--------------------|---------------------|----------------------------------------------|
+| Idle               | Auto Heating ON      | Temp < Setpoint (auto mode active).          |
+| Auto Heating ON    | Auto Heating OFF     | Temp ≥ Setpoint.                             |
+| Auto Heating OFF   | Idle                 | Temp stabilizes.                             |
+| Auto Heating OFF   | Auto Heating ON      | Temp < Setpoint.                             |
 
-![](./pictures/server-block-diagram-initialization.png)
+### Manual Mode
 
-#### Max and Min Temperature:  
+| From                   | To                      | Trigger                                   |
+|------------------------|-------------------------|--------------------------------------------|
+| Any                    | Manual Mode             | Manual control enabled.                    |
+| Manual ON              | Manual OFF              | User toggles heater OFF.                   |
+| Manual OFF             | Manual ON               | User toggles heater ON.                    |
+| Manual Mode            | Idle                    | Manual control disabled.                   |
 
-![](./pictures/server-block-diagram-calculate-max-and-min-temp.png)
+### Maintenance Mode
 
-#### Track last 5 for Average:  
+| From         | To            | Trigger                          |
+|--------------|---------------|----------------------------------|
+| Any          | Maintenance   | Temperature > 100°C.             |
+| Maintenance  | Idle          | Fault cleared + reset.           |
 
-![](./pictures/server-block-diagram-track-last-5-for-average.png)
+---
 
-#### System Control State Management (Automatic):  
+## 🖥️ Server Components
 
-![](./pictures/server-block-diagram-system-control-state-management-automatic.png)
+### Front Panel  
+![Server Panel](./pictures/server-front-panel.png)
 
-#### System Control State Management (Manual):  
+### Block Diagram Snapshots
 
-![](./pictures/server-block-diagram-system-control-state-management-manual.png)
+- **Full Diagram**  
+  ![](./pictures/server-block-diagram.png)
 
-#### System Control State Management (Maintenance):  
+- **Initialization**  
+  ![](./pictures/server-block-diagram-initialization.png)
 
-![](./pictures/server-block-diagram-maintenance-state-management.png)
+- **Temperature Tracking**  
+  - Max/Min:  
+    ![](./pictures/server-block-diagram-calculate-max-and-min-temp.png)  
+  - Last 5 Average:  
+    ![](./pictures/server-block-diagram-track-last-5-for-average.png)
 
-#### Password Control:  
+- **System Control**  
+  - Automatic:  
+    ![](./pictures/server-block-diagram-system-control-state-management-automatic.png)  
+  - Manual:  
+    ![](./pictures/server-block-diagram-system-control-state-management-manual.png)  
+  - Maintenance:  
+    ![](./pictures/server-block-diagram-maintenance-state-management.png)
 
-![](./pictures/server-block-diagram-password-control.png)
+- **Other Features**  
+  - Password Protection:  
+    ![](./pictures/server-block-diagram-password-control.png)  
+  - Variable Mapping:  
+    ![](./pictures/server-block-diagram-local-to-global.png)  
+  - Heater ON/OFF:  
+    ![](./pictures/server-block-diagram-heating-state-management-heating-on.png)  
+    ![](./pictures/server-block-diagram-heating-state-management-heating-off.png)
 
-#### Map Local Variables to Globals:  
+- **Data Logging**  
+  ![](./pictures/server-block-diagram-file-output-1.png)  
+  ![](./pictures/server-block-diagram-file-output-2.png)  
+  ![](./pictures/historical-reading-output-csv.png)
 
-![](./pictures/server-block-diagram-local-to-global.png)
+---
 
-#### Heating State Management (Heating ON):  
+## 🧑‍💻 Client Interface
 
-![](./pictures/server-block-diagram-heating-state-management-heating-on.png)
+### Front Panel  
+![Client Panel](./pictures/client-front-panel.png)
 
-#### Heating State Management (Heating OFF):  
+### Block Diagram  
+![Client Diagram](./pictures/client-block-diagram.png)
 
-![](./pictures/server-block-diagram-heating-state-management-heating-off.png)
+---
 
-#### Logging to File:  
+## 🌐 Global Variables Panel
 
-![](./pictures/server-block-diagram-file-output-1.png)
-![](./pictures/server-block-diagram-file-output-2.png)
-![](./pictures/historical-reading-output-csv.png)
+### Front Panel  
+![Global Panel](./pictures/global-front-panel.png)
 
-## Client
+---
 
-### Front Panel
+## ▶️ How to Use
 
-![](./pictures/client-front-panel.png)
+1. **Launch Panels:**
+   - Server Front + Block Diagram
+   - Client Front + Block Diagram
+   - Global Front Panel
 
-### Block Diagram
+2. **Set CSV Log Path:**
+   - In the Server Front Panel, configure via *Historical Log Path Dialog*.
 
-![](./pictures/client-block-diagram.png)
+3. **Start Execution:**
+   - Click the Run arrow on the Server, then on the Client.
 
-## Global
+4. **Initial System State:**
 
-### Front Panel
+   | Variable               | Value          |
+   |------------------------|----------------|
+   | Temperature            | 50             |
+   | Min Temperature        | 1000           |
+   | Max Temperature        | 0              |
+   | System Control         | Automatic      |
+   | Heater                 | OFF            |
+   | Temp Low Point         | 40             |
+   | Temp High Point        | 80             |
+   | Power                  | ON             |
+   | Sample Rate            | 200            |
+   | Password               | `Elena`        |
+   | Password Input         | `""` (blank)   |
 
-![](./pictures/global-front-panel.png)
+5. **Behavior:**
+   - Heater toggles between ON/OFF based on thresholds (40–80°C) in Auto mode.
+   - Manual mode can be enabled with the password `Elena`.
 
-## How use this Labview Project
+---
 
-First a user must open all panels:  
+## ⚙️ Requirements
 
-* Server Back Panel
-* Client Front Panel
-* Client Back Panel
-* Global Front Panel
+- LabVIEW (2025 Q1 or later)  
+- LabVIEW Datalogging and Supervisory Control Module  
+- Windows OS  
 
-Within the Server Front Panel, they must set the output CSV file path using the Historical Log Path Dialog.  
-
-They must then start the Server by clicking the Run arrow in the upper left side of the window.  
-Followed the Client by clicking the Run arrow in the upper left side of the window.  
-
-The initial state of the program will be:  
-
-* Temperature: 50
-* Min Temperature: 1000 (High so it will be overridden on first comparison)
-* Max Temperature: 0 (Low so it will be overridden on first comparison)
-* System Control: Automatic
-* Heater: OFF
-* Temperature Low point: 40
-* Temperature High point: 80
-* Power: ON
-* Sample Rate: 200
-* Password Input: “”
-* Password: Elena
-
-From the Client, Server and Global Front Panel you will start to see indicators being updated with new data.  
-
-The values shared between the Client, Server and the Global Front Panel will stay in sync throughout the duration of the program.  
-
-As the system is in automatic mode and the temperature starts between the low and high set points the heater will turn on.  
-Once the temperature reaches the high point (80) the heater will automatically turn off and remain off until the temperature drops below the low point (40) at which point the heater will turn on again.  
-This will cycle forever as long as the system is in Automatic mode.  
-
-If a user wants to switch to Manual mode, they must enter the correct password “Elena” into the password box.  
-Once they so and click outside of the box the switch will no longer be disabled.  
+---
