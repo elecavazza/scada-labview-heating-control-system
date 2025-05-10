@@ -120,3 +120,42 @@ SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control M
 ### Front Panel
 
 ![](./pictures/global-front-panel.png)
+
+## How use this Labview Project
+
+First a user must open all panels:  
+
+* Server Back Panel
+* Client Front Panel
+* Client Back Panel
+* Global Front Panel
+
+Within the Server Front Panel, they must set the output CSV file path using the Historical Log Path Dialog.  
+
+They must then start the Server by clicking the Run arrow in the upper left side of the window.  
+Followed the Client by clicking the Run arrow in the upper left side of the window.  
+
+The initial state of the program will be:  
+
+* Temperature: 50
+* Min Temperature: 1000 (High so it will be overridden on first comparison)
+* Max Temperature: 0 (Low so it will be overridden on first comparison)
+* System Control: Automatic
+* Heater: OFF
+* Temperature Low point: 40
+* Temperature High point: 80
+* Power: ON
+* Sample Rate: 200
+* Password Input: “”
+* Password: Elena
+
+From the Client, Server and Global Front Panel you will start to see indicators being updated with new data.  
+
+The values shared between the Client, Server and the Global Front Panel will stay in sync throughout the duration of the program.  
+
+As the system is in automatic mode and the temperature starts between the low and high set points the heater will turn on.  
+Once the temperature reaches the high point (80) the heater will automatically turn off and remain off until the temperature drops below the low point (40) at which point the heater will turn on again.  
+This will cycle forever as long as the system is in Automatic mode.  
+
+If a user wants to switch to Manual mode, they must enter the correct password “Elena” into the password box.  
+Once they so and click outside of the box the switch will no longer be disabled.  
