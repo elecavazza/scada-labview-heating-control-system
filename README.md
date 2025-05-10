@@ -2,7 +2,7 @@
 
 # scada-labview-heating-control-system
 
-SCADA Heating Control System using LabVIEW Datalogging and Supervisory Control Module
+This is a LabVIEW-based SCADA heating control system utilizing the Datalogging and Supervisory Control Module. It supports automatic, manual, and maintenance modes, with robust temperature state management and logging.  
 
 ## State Table
 
